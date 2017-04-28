@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <script src="../jquery/jquery-1.9.1.min.js"></script>
+    <script src="../jquery/js/jquery-ui-1.10.3.custom.js"></script>
+    <link href="../jquery/css/cupertino/jquery-ui-1.10.3.custom.css" rel="stylesheet">
+    <link rel="stylesheet" href="../jquery/themes/base/jquery.ui.all.css">
+    <script src="../jquery/ui/jquery.ui.core.js"></script>
+    <script src="../jquery/ui/jquery.ui.widget.js"></script>
+    <script src="../jquery/ui/jquery.ui.position.js"></script>
+    <script src="../jquery/ui/jquery.ui.menu.js"></script>
+    <script src="../jquery/ui/jquery.ui.autocomplete.js"></script>
+    <link rel="stylesheet" href="css/demos.css"/>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#centerDiv').center();
+            $(window).bind('resize',function () {
+                $("#centerDiv").center({transition:500});
+            });
+        });
+        /**
+         * 在jQuery中，width()方法用于获得元素宽度；innerWidth()方法用于获得包括内边界（padding）的元素宽度，
+         * outerWidth()方法用于获得包括内边界(padding)和边框(border)的元素宽度，
+         * 如果outerWidth()方法的参数为true则外边界(margin)也会被包括进..
+
+         jQuery中的.height()、.innerHeight()和.outerHeight()和W3C的盒模型相关的几个获取元素尺寸的方法。
+         对应的宽度获取方法分别为.width()、.innerWidth()和.outerWidth()，在此不详述。
+
+         1. .height()
+
+         获取匹配元素集合中的第一个元素的当前计算高度值 或 设置每一个匹配元素的高度值（带一个参数）。
+
+
+
+         注意：1）.css('height')和.height()之间的区别是后者返回一个没有单位的数值（例如，400），
+         前者是返回带有完整单位的字符串（例如，400px）。
+
+         2）.height()总是返回内容宽度,不管CSSbox-sizing属性值。
+         .height('value')设置的容器宽度是根据CSSbox-sizing属性来定的,
+         将这个属性值改成border-box，将造成这个函数改变这个容器的outerHeight，而不是原来的内容高度。
+
+         2. .innerHeight()
+
+         为匹配的元素集合中获取第一个元素的当前计算高度值,包括padding，但是不包括border。
+
+
+
+         3. .outerHeight()
+
+         获取元素集合中第一个元素的当前计算高度值,包括padding，border和选择性的margin。
+         返回一个整数（不包含“px”）表示的值 ，或如果在一个空集合上调用该方法，则会返回 null。
+
+
+
+         在.outerHeight()计算中总是包含padding-top ,
+         padding-bottom
+         和 border-top，
+         border-bottom ；
+         如果includeMargin参数是true，
+         那么margin (top 和 bottom)也会被包含。
+         */
+        (function ($) {
+            $.fn.extend({
+                center:function (options) {
+                    var options = $.extend({
+                        inside:window, // element, center into window
+                        transition:0, // millisecond, transition time
+                        minX:0, // pixel, minimum left element value
+                        minY:0, // pixel, minimum top element value
+                        withScrolling:true, // booleen, take care of the scrollbar (scrollTop)
+                        vertical:true, // booleen, center vertical
+                        horizontal:true // booleen, center horizontal
+                    }, options);
+                  return this.each(function () {
+                      var props = {position:'absolute'};
+                      if (options.vertical){
+                          var top = ($(options.inside).height() - $(this).outerHeight())/2;
+                          if (options.withScrolling){
+                              top +=$(options.inside).scrollTop() || 0;
+                          }
+
+                          top = (top>options.minY?top:options.minY);
+                          $.extend(props,{top:top +'px'});
+                      }
+
+                      if (options.horizontal){
+                          var left = ($(options.inside).width() - $(this).outerWidth())/2;
+                          if(options.withScrolling){
+                              left += $(options.inside).scrollLeft()||0;
+
+                          };
+                          left = (left>options.minX?left:options.minX);
+                          $.extend(props,{left:left +'px'});
+                      }
+
+                      if (options.transition >0)
+                      {
+                          $(this).animate(props,options.transition);
+                      }else {
+                          $(this).css(props);
+                      }
+
+                      return $(this);
+                  })
+                }
+            });
+        })(jQuery);
+    </script>
+    <style type="text/css">
+        #centerDiv {
+            width:150px;
+            height:150px;
+            font-size:12px;
+            color:blue;
+            background-color:#808080;
+        }
+    </style>
+    <title>超实用的jQuery代码段</title>
+</head>
+<body>
+<h2 id="h2-caption">超实用的jQuery代码段 - jQuery如何设定div始终居中显示</h2>
+<div id="centerDiv">设定div始终居中显示</div>
+</body>
+</html>
